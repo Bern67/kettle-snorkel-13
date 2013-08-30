@@ -7,10 +7,10 @@ data <- subset(data,select = c("Year","Site","SiteLength..km.","Marked","MarkObs
 colnames(data) <- c("Year","Site","SiteLength","Mark","Recap","Total") # Final column isn't yet the total; will become so below
 
 # Data correction, cleaning and shaping
-warning("corrects 2010 data at GR3 so total count 242 not 86")
+#warning("corrects 2010 data at GR3 so total count 242 not 86")
 data$Total[data$Site == "GR3" & data$Year == 2010 & data$Total == 86]<-242
 
-warning("hack to ensure site overlap between years")
+#warning("hack to ensure site overlap between years")
 data$Site <- as.character(data$Site)
 data$Site[data$Site == "WKTa"] <- "WKT"
 data$Site[data$Site == "WKCa"] <- "WKC"
@@ -26,7 +26,7 @@ data$Mark <- as.integer(data$Mark)
 data$Recap <- as.integer(data$Recap)
 data$Total <- as.integer(data$Total)
 
-warning("this is a hack to deal with inconsistent marks and recaps")
+#warning("this is a hack to deal with inconsistent marks and recaps")
 mark <- pmax(data$Mark, data$Recap)
 recap <- pmin(data$Mark, data$Recap)
 data$Mark <- mark
