@@ -1,18 +1,15 @@
 source("header.r")
 source("model-count.r")
 
-count <- readRDS("count.rds")
+# Load data from disk
+set_folders("count")
+count <- load_rdata()
 
-analysis <- janalysis(
-  model = model, data = count, n.iter=10^5
-)
+# Run, save and sumarise jagganaut analysis
+analysis <- jags_analysis(models, data = count, niter = 10^5)   
 
-summary(analysis)
+save_analysis(analysis)
+print(summary(analysis))
 
-saveRDS(analysis,"analysis.rds")
-
-write.csv(calc_estimates(analysis),"estimates.csv")
-
-pdf("trace.pdf",width=8.5,height=11)
-plot(analysis)
-dev.off()
+save_tables(analysis)
+save_plots(analysis)
