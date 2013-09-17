@@ -36,6 +36,16 @@ if(.Platform$OS.type=="unix") {
   load_all("~/R/poiscon/poiscon")  
 }
 
+
+#Load jaggernaut and poiscon if the above installations from GitHub fail, e.g. if offline
+if (!"package:jaggernaut" %in% search()) {
+  library(jaggernaut)
+}
+if (!"package:poiscon" %in% search()) {
+  library(poiscon)
+}
+
+
 graphics.off()
 remove(list=objects(all.names=T))
 reset_dirs()
