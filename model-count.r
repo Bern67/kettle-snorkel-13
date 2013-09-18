@@ -47,13 +47,15 @@ model1 <- jags_model("model {
     dMark[i] <- max(Mark[i], 1)
     Recap[i] ~ dbin(dEfficiency[i], dMark[i])
 
-    log(eDensity[i]) <- bDensity0 + bDensityYear[Year[i]] + bDensitySite[Site[i]] + bDensitySiteYear[Site[i], Year[i]]
+    log(eDensity[i]) <- bDensity0 + bDensityYear[Year[i]]
+                                  + bDensitySite[Site[i]]
+                                  + bDensitySiteYear[Site[i], Year[i]]
     eAbundance[i] <- eDensity[i] * SiteLength[i]
     eTotal[i] ~ dpois(eAbundance[i])
     Total[i] ~ dbin(eEfficiency[i], eTotal[i])
   }
 
-} ",
+} ",                                  
 derived_code = "model {
 
   for (i in 1:nrow) {

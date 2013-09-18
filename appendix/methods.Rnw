@@ -1,0 +1,184 @@
+
+\documentclass{article}
+
+\addtolength{\oddsidemargin}{-1.25cm}
+\addtolength{\textwidth}{2.5cm}
+
+\addtolength{\topmargin}{-1.25cm}
+\addtolength{\textheight}{2.5cm}
+
+\usepackage{hyperref}
+\usepackage{float}
+\renewcommand{\familydefault}{\sfdefault}
+\pagenumbering{roman}
+
+<<echo=FALSE>>=
+library(xtable)
+jags_model <- function (...) { list (...) }
+@
+
+<<vars,echo=FALSE>>=
+if(exists("description")) {
+  desc <- description
+  desc <- desc[order(names(desc))]
+  mat <- matrix(NA, nrow = length(desc), ncol = 2)
+  mat[,1] <- names(desc)
+  mat[,2] <- desc
+  colnames(mat) <- c("Variable","Description")
+
+  print(
+    xtable(mat,align=c("c","c","c")),
+    table.placement="H",
+    caption.placement="top",
+    include.rownames=FALSE
+  )
+} 
+@
+
+<<varsandpars,echo=FALSE>>=
+if(exists("description")) {
+  desc <- description
+  desc <- desc[order(names(desc))]
+  mat <- matrix(NA, nrow = length(desc), ncol = 2)
+  mat[,1] <- names(desc)
+  mat[,2] <- desc
+  colnames(mat) <- c("Variable/Parameter","Description")
+
+  print(
+    xtable(mat,align=c("c","c","c")),
+    table.placement="H",
+    caption.placement="top",
+    include.rownames=FALSE
+  )
+} 
+@
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+\bibliographystyle{plain}
+
+\title{Hierarchical Bayesian Analysis --- Methods}
+\author{Joe Thorley Ph.D., R.P.Bio. \\ Poisson Consulting Ltd.
+        \\ \\
+        Patrick M. Hogan D.Phil.
+}
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+
+\section{General Approach}
+
+Hierarchical Bayesian models were fitted to the Kettle River snorkel data using the software packages R 3.0.1\cite{r_core_team_r:_2013} and JAGS 3.3.0\cite{plummer_jags_2012} which interfaced with each other via jaggernaut 1.0.0\cite{thorley_jaggernaut:_2013}. For additional information on hierarchical Bayesian modelling in the BUGS language, of which JAGS uses a dialect, the reader is referred to Kery and Schuab (2011)\cite[p.41-44]{kery_bayesian_2011}.
+
+\textbf{[Check these details for this project.]} Unless specified, the models assumed vague (low information) prior distributions \cite[p.36]{kery_bayesian_2011}. The posterior distributions were estimated from a minimum of 1,000 Markov Chain Monte Carlo (MCMC) samples thinned from the second halves of three chains\cite[p.38-40]{kery_bayesian_2011}. Model convergence was confirmed by ensuring that Rhat\cite[p.40]{kery_bayesian_2011} was less than 1.1 for each of the parameters in the model\cite[p.61]{kery_bayesian_2011}. Posterior distributions were summarised in terms of a point \emph{estimate} (median), \emph{lower} and \emph{upper} 95\% credibility limits (2.5th and 97.5th percentiles), percent relative \emph{error} (half the 95\% credibility interval as a percent of the point estimate) and 
+\emph{significance} (Bayesian equivalent of two-sided frequentist p-value)\cite[p.37,42]{kery_bayesian_2011}.
+
+\textbf{[Check these details for this project.]} The results were displayed graphically by plotting the modeled relationship between the particular variable(s) and the response (with 95\% credibility intervals) while the remaining variables were held constant. Unless stated otherwise, continuous and discrete fixed variables were held constant at their mean and first level values respectively while random variables were held constant at their typical values (expected values of the underlying hyperdistributions) \cite[p.77-82]{kery_bayesian_2011}. Where informative the influence of particular variables was expressed in terms of the effect size (i.e., percent change in the response variable) with 95\% credibility intervals\cite{bradford_using_2005}. Plots were produced using the ggplot2 R package \cite{wickham_ggplot2_2009}.
+
+\section{JAGS Distributions, Functions and Operators}
+
+JAGS distributions, functions and operators are defined in the following three tables. For additional information on the JAGS dialect of  the BUGS language see the JAGS User Manual\cite{plummer_jags_2012}.
+
+<<echo=FALSE,results=tex>>=
+mat <- matrix(
+  ncol = 2,
+  dimnames = list(NULL,c("JAGS Distribution","Description")),
+  data = c("dunif(a, b)","Uniform distribution")
+)
+
+mat  <- rbind(mat,c("dnorm(mu, sd^-2)","Normal distribution"))
+mat  <- rbind(mat,c("dpois(lambda)","Poisson distribution"))
+mat  <- rbind(mat,c("dbin(p, n)","Binomial distribution"))
+mat  <- rbind(mat,c("dbern(p)","Bernoulli distribution"))
+mat  <- rbind(mat,c("dlnorm(mu, sd^-2)","Log-normal distribution"))
+#mat  <- rbind(mat,c("dcat(pi)","Categorical distribution"))
+#mat  <- rbind(mat,c("ddirch(alpha)","Dirichlet distribution"))
+#mat  <- rbind(mat,c("dgamma(shape, rate)","Gamma distribution"))
+
+
+mat <- mat[order(mat[,1,drop=T]),]
+
+print(
+  xtable(mat,align=c("c","c","c")),
+  table.placement="H",
+  caption.placement="top",
+  include.rownames=FALSE
+)
+@
+
+<<echo=FALSE,results=tex>>=
+mat <- matrix(
+  ncol = 2,
+  dimnames = list(NULL,c("JAGS Function","Description")),
+  data = c("log(x)","Log of x")
+)
+mat  <- rbind(mat,c("max(x,y)","Maximum of x and y"))
+mat  <- rbind(mat,c("min(x,y)","Minimum of x and y"))
+mat  <- rbind(mat,c("logit(x)","Log odds of x"))
+mat  <- rbind(mat,c("sum(a)","Sum of elements of a"))
+mat  <- rbind(mat,c("round(x)","Round to integer away from zero"))
+mat  <- rbind(mat,c("T(x,y)","Truncate distribution so that values lie between x and y"))
+
+mat <- mat[order(mat[,1,drop=T]),]
+
+print(
+  xtable(mat,align=c("c","c","c")),
+  table.placement="H",
+  caption.placement="top",
+  include.rownames=FALSE
+)
+@
+
+<<echo=FALSE,results=tex>>=
+mat <- matrix(
+  ncol = 2,
+  dimnames = list(NULL,c("JAGS Operator","Description")),
+  data = c("<-","Deterministic relationship")
+)
+mat  <- rbind(mat,c("~","Stochastic relationship"))
+mat  <- rbind(mat,c("x^y","Power where x is raised to the power of y"))
+mat  <- rbind(mat,c("1:n","Vector of integers from 1 to n"))
+mat  <- rbind(mat,c("a[1:n]","Subset of first n values in a"))
+mat  <- rbind(mat,c("for (i in 1:n) {...} ","Repeat ... for 1 to n times incrementing i each time"))
+
+mat <- mat[order(mat[,1,drop=T]),]
+
+print(
+  xtable(mat,align=c("c","c","c")),
+  table.placement="H",
+  caption.placement="top",
+  include.rownames=FALSE
+)
+@
+\section{JAGS Models}
+
+The following sections provide the key assumptions, variable and parameter definitions and JAGS model code for the analyses. By convention variables are named using camel case and the number of levels of a discrete variable \verb_ObsFac_ is referenced by \verb_nObsFac_. 
+
+\subsection{Model}
+
+Total numer of fish was estimated from the counts.
+\\ \\
+Key assumptions of the count model include:
+\begin{itemize}
+  \item Count is Poisson distributed. \textbf{[Check this.]}
+\end{itemize}
+
+\subsubsection{Variables and Parameters}
+
+<<results=tex,echo=FALSE>>=
+source("../model-count.r")
+<<varsandpars>>
+@
+
+\subsubsection{Model - JAGS Code}
+
+<<tidy=TRUE,echo=FALSE>>=
+cat(model1[[1]])
+@
+
+\bibliography{appendix}
+
+\end{document}
