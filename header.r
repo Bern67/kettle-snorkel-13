@@ -20,7 +20,7 @@ if(.Platform$OS.type=="unix") {
 if(.Platform$OS.type=="unix") {
   if (T) {
     if (!"package:jaggernaut" %in% search()) {
-      install_github("jaggernaut","joethorley","v1.0.0")
+      install_github("jaggernaut","joethorley","v1.0.5")
       library(jaggernaut)
     }
     if (!"package:poiscon" %in% search()) {
