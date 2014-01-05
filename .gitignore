@@ -1,7 +1,13 @@
 .Rproj.user
 .Rhistory
 .RData
-kettle_snorkel_12.Rproj
-Kettle River data.xlsx
-Kettle River data.csv
-R.Rproj
+*.Rproj
+
+*.pdf
+*.log
+*.gz
+*.toc
+*.bbl
+*.tex
+
+input
