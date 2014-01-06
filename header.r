@@ -1,62 +1,59 @@
-library(grid)
+library(assertthat)
 library(ggplot2)
-library(scales)
+library(grid)
+library(knitr)
+library(knitcitations)
 library(lubridate)
+library(markdown)
 library(plyr)
 library(reshape2)
 library(RODBC)
-library(devtools)
-library(rjags)
-library(abind)
+library(scales)
 library(stringr)
-library(MASS)
+library(jaggernaut)
+library(poiscon)
 
-if(.Platform$OS.type=="unix") {
-  library(parallel)
-  library(multicore)
-  library(doMC)
-}
-
-if(.Platform$OS.type=="unix") {
-  if (T) {
-    if (!"package:jaggernaut" %in% search()) {
-      install_github("jaggernaut","joethorley","v1.0.5")
-      library(jaggernaut)
-    }
-    if (!"package:poiscon" %in% search()) {
-      install_github("poiscon","poissonconsulting","v0.2.6")
-      library(poiscon)
-    }    
+if (.Platform$OS.type == "unix") {
+  if (Sys.info()["sysname"] == "Darwin") {
+    quartzFonts(sans = quartzFont(rep("Arial", 4)))
   } else {
-    load_all("~/Documents/R/jaggernaut/jaggernaut")
-    load_all("~/Documents/R/poiscon/poiscon")
+    stop("need to set font to Arial for linux operating systems")
   }
 } else {
-  load_all("~/R/jaggernaut/jaggernaut")
-  load_all("~/R/poiscon/poiscon")  
+  windowsFonts(Arial = windowsFont("Arial"))
 }
-
-
-#Load jaggernaut and poiscon if the above installations from GitHub fail, e.g. if offline
-if (!"package:jaggernaut" %in% search()) {
-  library(jaggernaut)
-}
-if (!"package:poiscon" %in% search()) {
-  library(poiscon)
-}
-
 
 graphics.off()
-remove(list=objects(all.names=T))
-reset_dirs()
+remove(list = objects())
 
-theme_set(theme_Poisson())
-palette (palette_Poisson())
+theme_set(theme_Golder())
+palette(palette_Golder())
 
-opts_jagr(mode = "report")
+reset_folders()
 
-if(.Platform$OS.type=="windows") {
- windowsFonts(Arial = windowsFont('Arial'))   
-} else if(.Platform$OS.type=="unix") {
- quartzFonts(sans = quartzFont(rep('Arial',4)))   
+opts_jagr(mode = "debug")
+
+if (getDoParWorkers() == 1) {
+  registerDoParallel(6)
+  opts_jagr(parallel = TRUE)
 }
+
+opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, 
+               comment = NA, results = "asis")
+
+.project <- "Kettle River Rainbow Snorkels 2013"
+.authors <- "Thorley J.L. & Hogan P.M."
+.date <- "6^th January 2014"
+
+.replacement <- c("count" = "",
+                  "density-year" = "Year",
+                  "density-site" = "Site",
+                  "density-site-year" = "Site-Year",
+                  "efficiency" = "Efficiency")
+
+.bib <- read.bibtex("references.bib")
+
+.bib <- c(.bib, 
+          "jaggernaut" = citation("jaggernaut"), 
+          "ggplot2" = citation("ggplot2"),
+          "R" = citation())
