@@ -1,37 +1,31 @@
 source("header.r")
 
-# Data import, selection and renaming
-data <- read.csv("Kettle River data.csv")
-data <- subset(data,Replicate == 1)
-data <- subset(data,select = c("Year","Site","SiteLength..km.","Marked","MarkObserved","Unmarked.Observed"))
-colnames(data) <- c("Year","Site","SiteLength","Mark","Recap","Total") # Final column isn't yet the total; will become so below
+set_folders("input")
 
-# Data correction, cleaning and shaping
-#warning("corrects 2010 data at GR3 so total count 242 not 86")
-data$Total[data$Site == "GR3" & data$Year == 2010 & data$Total == 86]<-242
+data <- load_rdata()
 
-#warning("hack to ensure site overlap between years")
-data$Site <- as.character(data$Site)
-data$Site[data$Site == "WKTa"] <- "WKT"
-data$Site[data$Site == "WKCa"] <- "WKC"
-data$Site[data$Site == "GR3a"] <- "GR3"
-data$Site <- factor(data$Site)
-
-data$Year <- factor(data$Year)
-data$Mark[is.na(data$Mark)] <- 0
-data$Recap[is.na(data$Recap)] <- 0
-data$Total <- data$Recap + data$Total #Turns final column into total
-
-data$Mark <- as.integer(data$Mark)
-data$Recap <- as.integer(data$Recap)
-data$Total <- as.integer(data$Total)
-
-#warning("this is a hack to deal with inconsistent marks and recaps")
-mark <- pmax(data$Mark, data$Recap)
-recap <- pmin(data$Mark, data$Recap)
-data$Mark <- mark
-data$Recap <- recap
-
-# Save data to disk
 set_folders("count")
+
+data$Released <- as.integer(data$Released)
+data$Resighted <- as.integer(data$Resighted)
+data$Count <- as.integer(data$Count)
+
+data$Replicate <- factor(data$Replicate)
+data$Year <- factor(data$Year)
+
 save_rdata(data)
+
+data$Year <- as.integer(as.character(data$Year))
+
+gp <- ggplot(data, aes(x = Year, y = Count))
+gp <- gp + facet_wrap(~Site)
+gp <- gp + geom_point(aes(shape = Replicate, color = Replicate))
+gp <- gp + scale_x_continuous(name = "Year", breaks = c(2000,2005,2010))
+gp <- gp + scale_y_continuous(name = "Observed Count",label=comma)
+gp <- gp + scale_color_manual(values = palette())
+gp <- gp + expand_limits(y=0)
+
+gwindow(1,1)
+print(gp)
+
+save_plot("count")
