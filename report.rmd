@@ -30,7 +30,7 @@ variable(s) and the response (with `r opts_jagr("level") * 100`%
 credible intervals) while the 
 remaining variables were held constant. In general, 
 continuous and discrete fixed variables are held constant at their mean and 
-first level values respectively while random variables reheld constant at their 
+first level values respectively while random variables are held constant at their 
 typical values (expected values of the underlying hyperdistributions) 
 `r citep(.bib["kery_bayesian_2011"], page = "77-82")`. Where informative the influence of particular variables is expressed in terms 
 of the effect size (i.e., percent change in the response variable) with 
@@ -43,8 +43,12 @@ The lineal density and observer efficiency were estimated from the snorkel count
 and mark-resighting data for the Kettle River using a binomial mixture model `r citep(.bib["kery_bayesian_2011"], page = "383-388")`
 
 Key assumptions of the binomial mixture model include:
-* Detection probability is constant for all individuals.
 * Lineal density varies randonly with year, site and site within year.
+* Observer efficiency varies with discharge (a second order polynomial was considered
+but was not significant).
+* Detection probability is constant for all individuals.
+* There is no tag loss.
+* Sites are closed between marking and counting.
 * There are no false positives such as double counts.
 
 ## JAGS Code
