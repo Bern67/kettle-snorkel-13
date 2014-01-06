@@ -11,13 +11,13 @@ description = c(
   "bDensitySiteYear[st, yr]" = "Effect of stth site in yrth year on log density",
   "nrow" = "Number of site counts",
   "eEfficiency[i]" = "Expected observer efficiency on the ith site count",
-  "Mark[i]" = "Number of fish marked prior to the ith site count",                  
-  "Recap[i]" = "Number of marked fish observed during ith site count",
+  "Released[i]" = "Number of fish marked prior to the ith site count",                  
+  "Resighted[i]" = "Number of marked fish observed during ith site count",
   "eDensity[i]" = "Expected density at ith site count",
   "SiteLength[i]" = "Length site during ith site count",
   "eAbundance[i]" = "Expected abundance at ith site count",
-  "eTotal[i]" = "Expected total number of fish at ith site count",
-  "Total[i]" = "Total number of fish observed during ith site count"
+  "eCount[i]" = "Expected total number of fish at ith site count",
+  "Count[i]" = "Total number of fish observed during ith site count"
 )
 
 model1 <- jags_model("model {
@@ -40,43 +40,40 @@ model1 <- jags_model("model {
     bDensityYear[yr] ~ dnorm(0, sDensityYear^-2)
   }         
                    
-  for (i in 1:nrow) {
+  for (i in 1:length(Count)) {
     logit(eEfficiency[i]) <- bEfficiency0
   
-    dEfficiency[i] <- min(eEfficiency[i], Mark[i])
-    dMark[i] <- max(Mark[i], 1)
-    Recap[i] ~ dbin(dEfficiency[i], dMark[i])
+    dEfficiency[i] <- min(eEfficiency[i], Released[i])
+    dReleased[i] <- max(Released[i], 1)
+    Resighted[i] ~ dbin(dEfficiency[i] * ProportionSurveyed[i], dReleased[i])
 
     log(eDensity[i]) <- bDensity0 + bDensityYear[Year[i]]
                                   + bDensitySite[Site[i]]
                                   + bDensitySiteYear[Site[i], Year[i]]
     eAbundance[i] <- eDensity[i] * SiteLength[i]
-    eTotal[i] ~ dpois(eAbundance[i])
-    Total[i] ~ dbin(eEfficiency[i], eTotal[i])
+    eCount[i] ~ dpois(eAbundance[i])
+    Count[i] ~ dbin(eEfficiency[i] * ProportionSurveyed[i], eCount[i])
   }
 
 } ",                                  
 derived_code = "model {
 
-  for (i in 1:nrow) {
+  for (i in 1:length(Count)) {
     logit(eEfficiency[i]) <- bEfficiency0
-    dEfficiency[i] <- min(eEfficiency[i], Mark[i])
-    dMark[i] <- max(Mark[i], 1)
-    eRecap[i] ~ dbin(dEfficiency[i],dMark[i]) 
   
-    log(eDensity[i]) <- bDensity0 + bDensityYear[Year[i]] + bDensitySite[Site[i]] + bDensitySiteYear[Site[i], Year[i]]
-    eAbundance[i] <- eDensity[i] * SiteLength[i]
-    eTotal[i] ~ dpois(eAbundance[i])
-    eCount[i] ~ dbin(eEfficiency[i],eTotal[i]) 
+    log(prediction[i]) <- bDensity0 + bDensityYear[Year[i]]
+                                  + bDensitySite[Site[i]]
+                                  + bDensitySiteYear[Site[i], Year[i]]
   
-    eResidual[i] <-  log(Total[i] / SiteLength[i] / eEfficiency[i]) - log(eDensity[i])
+    residual[i] <-  log(Count[i] / SiteLength[i] / 
+                       (eEfficiency[i] * ProportionSurveyed[i])) 
+                     - log(prediction[i])
   }
-
 }",
 gen_inits = function (data) {
 
   inits <- list()
-  inits$eTotal <- data$Total
+  inits$eCount <- data$Count
   inits$bDensity0 <- 5.5
   inits$sDensitySite <- 1.0
   inits$sDensitySiteYear <- 0.5
@@ -84,7 +81,9 @@ gen_inits = function (data) {
 
   return (inits)
 },
-random_effects = list(bDensitySite = "Site", bDensityYear = "Year", bDensitySiteYear = c("Site","Year"))
+random_effects = list(bDensitySite = "Site", bDensityYear = "Year", 
+                      bDensitySiteYear = c("Site","Year")),
+select = c("Year","Site","SiteLength","ProportionSurveyed","Released","Resighted","Count")
 )
 
-models <- list(model1)
+models <- combine(model1)
