@@ -23,6 +23,8 @@ description = c(
 model1 <- jags_model("model {
 
   bEfficiency0 ~ dnorm(0, 2^-2)
+  bEfficiencyDischarge ~ dnorm(0, 2^-2)
+  bEfficiencyDischarge2 ~ dnorm(0, 2^-2)
 
   bDensity0 ~ dnorm(0, 5^-2)
 
@@ -41,7 +43,8 @@ model1 <- jags_model("model {
   }         
                    
   for (i in 1:length(Count)) {
-    logit(eEfficiency[i]) <- bEfficiency0
+    logit(eEfficiency[i]) <- bEfficiency0 + bEfficiencyDischarge * Discharge[i] +
+                              bEfficiencyDischarge2 * Discharge[i]^2
   
     dEfficiency[i] <- min(eEfficiency[i], Released[i])
     dReleased[i] <- max(Released[i], 1)
@@ -59,7 +62,8 @@ model1 <- jags_model("model {
 derived_code = "model {
 
   for (i in 1:length(Count)) {
-    logit(eEfficiency[i]) <- bEfficiency0
+    logit(eEfficiency[i]) <- bEfficiency0 + bEfficiencyDischarge * Discharge[i] +
+                              bEfficiencyDischarge2 * Discharge[i]^2
   
     log(prediction[i]) <- bDensity0 + bDensityYear[Year[i]]
                                   + bDensitySite[Site[i]]
@@ -83,7 +87,7 @@ gen_inits = function (data) {
 },
 random_effects = list(bDensitySite = "Site", bDensityYear = "Year", 
                       bDensitySiteYear = c("Site","Year")),
-select = c("Year","Site","SiteLength","ProportionSurveyed","Released","Resighted","Count")
+select = c("Year","Site","SiteLength","ProportionSurveyed","Discharge*","Released","Resighted","Count")
 )
 
 models <- combine(model1)
