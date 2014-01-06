@@ -1,0 +1,28 @@
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+source("header.r")
+```
+
+```{r}
+cat("# Figures - ", .project, "\n")
+cat("## Authors - ", .authors, "\n")
+cat("## Date - ", .date, "\n")
+```
+
+## Introduction
+
+As described in the Methods document model results are displayed 
+graphically by plotting the modeled relationship between the particular 
+variable(s) and the response (with `r opts_jagr("level") * 100`% 
+credible intervals) with the 
+remaining variables were held constant. In general, 
+continuous and discrete fixed variables are held constant at their mean and 
+first level values respectively while random variables are held constant at their 
+typical values (expected values of the underlying hyperdistributions). Where informative the influence of particular variables is expressed in terms 
+of the effect size (i.e., percent change in the response variable) with 
+`r opts_jagr("level") * 100`% credible intervals.
+
+## Figures
+
+```{r}
+knit_figures(.replacement)
+```
