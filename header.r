@@ -31,7 +31,7 @@ palette(palette_Golder())
 
 reset_folders()
 
-opts_jagr(mode = "debug")
+opts_jagr(mode = "report")
 
 if (getDoParWorkers() == 1) {
   registerDoParallel(6)
@@ -41,17 +41,14 @@ if (getDoParWorkers() == 1) {
 opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, 
                comment = NA, results = "asis")
 
-.project <- "Kettle River Rainbow Trout Snorkel Count Analysis 2013"
-.authors <- "Thorley J.L. & Hogan P.M."
-.date <- "6^th January 2014"
-
 .replacement <- c("count" = "",
-                  "density-year" = "Year",
-                  "density-site" = "Site",
-                  "density-site-year" = "Site-Year",
-                  "efficiency" = "Efficiency")
+                  "discharge" = "",
+                  "density-year" = "",
+                  "density-site" = "",
+                  "density-site-year" = "",
+                  "efficiency" = "")
 
-.bib <- read.bibtex("references.bib")
+.bib <- read.bibtex("report.bib")
 
 .bib <- c(.bib, 
           "jaggernaut" = citation("jaggernaut"), 
