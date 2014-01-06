@@ -1,0 +1,144 @@
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+source("header.r")
+```
+
+# Kettle River Rainbow Trout Snorkel Count Analysis 2013
+
+## 6^th Jan 2014 
+
+*Suggested Citation: Thorley J.L. and Hogan P.M. (2014) Kettle River Rainbow Trout Snorkel Count Analysis 2013. A Poisson Consulting Ltd. Analysis. URL: https://github.com/poissonconsulting/kettle_snorkel_12.*
+
+## Introduction
+
+Hierarchical Bayesian models were fitted to Kettle River snorkel data  using `r substr(R.version.string,1,15)` `r citep(.bib["r_core_team_r:_2013"])`
+and JAGS 3.3.0 
+`r citep(.bib["plummer_jags_2012"])` which interfaced with each other via the 
+jaggernaut `r citep(.bib["jaggernaut"])` R package. For additional information 
+on hierarchical Bayesian modelling in the BUGS language, of which JAGS uses a 
+dialect, the reader is referred to `r citet(.bib["kery_bayesian_2011"])`.
+
+## Methods
+
+Unless specified, the models assumed vague (low information) prior distributions `r citep(.bib["kery_bayesian_2011"], page = "36")`. The posterior distributions were estimated from a minimum of 1,000 Markov Chain Monte Carlo (MCMC) samples thinned from the second halves of three chains `r citep(.bib["kery_bayesian_2011"], page = "38-40")`. Model convergence was confirmed by ensuring that Rhat `r citep(.bib["kery_bayesian_2011"], page = "40")` was less than 1.1 for each of the parameters in the model `r citep(.bib["kery_bayesian_2011"], page = "61")`.
+
+The posterior distributions are summarised in terms of a point estimate (mean), lower and upper `r opts_jagr("level") * 100`% credibility limits (`r (1 - opts_jagr("level")) / 2 * 100`th and 
+`r (1 - (1 - opts_jagr("level")) / 2) * 100` th percentiles), the standard deviation (SD), percent relative error (half the 95% credibility interval as a percent of the point estimate) and significance `r citep(.bib["kery_bayesian_2011"], page = "37,42")`.
+
+The results are displayed 
+graphically by plotting the modeled relationship between the particular 
+variable(s) and the response (with `r opts_jagr("level") * 100`% 
+credible intervals) while the 
+remaining variables were held constant. In general, 
+continuous and discrete fixed variables are held constant at their mean and 
+first level values respectively while random variables reheld constant at their 
+typical values (expected values of the underlying hyperdistributions) 
+`r citep(.bib["kery_bayesian_2011"], page = "77-82")`. Where informative the influence of particular variables is expressed in terms 
+of the effect size (i.e., percent change in the response variable) with 
+`r opts_jagr("level") * 100`% credibile intervals 
+`r citep(.bib["bradford_using_2005"])`. Plots were produced using the ggplot2 R package `r citep(.bib["ggplot2"])`.
+
+## Model Assumptions
+
+The lineal density and observer efficiency were estimated from the snorkel count
+and mark-resighting data for the Kettle River using a binomial mixture model `r citep(.bib["kery_bayesian_2011"], page = "383-388")`
+
+Key assumptions of the binomial mixture model include:
+* Detection probability is constant for all individuals.
+* Lineal density varies randonly with year, site and site within year.
+* There are no false positives such as double counts.
+
+## JAGS Code
+
+JAGS distributions, functions and operators used in the models are defined in the following three tables. For additional information on the JAGS dialect of the BUGS language see the [JAGS User Manual](http://people.math.aau.dk/~kkb/Undervisning/Bayes13/sorenh/docs/jags_user_manual.pdf) `r citep(.bib["plummer_jags_2012"])`.
+
+### JAGS Distributions
+
+```{r}
+mat <- matrix(
+  ncol = 2,
+  dimnames = list(NULL,c("Distribution","Description")),
+  data = c("`dunif(a, b)`","Uniform distribution")
+)
+
+mat  <- rbind(mat,c("`dnorm(mu, sd^-2)`","Normal distribution"))
+mat  <- rbind(mat,c("`dpois(lambda)`","Poisson distribution"))
+mat  <- rbind(mat,c("`dbin(p, n)`","Binomial distribution"))
+mat  <- rbind(mat,c("`dbern(p)`","Bernoulli distribution"))
+#mat  <- rbind(mat,c("`dlnorm(mu, sd^-2)`","Log-normal distribution"))
+#mat  <- rbind(mat,c("`dcat(pi)`","Categorical distribution"))
+#mat  <- rbind(mat,c("`ddirch(alpha)`","Dirichlet distribution"))
+#mat  <- rbind(mat,c("`dgamma(shape, rate)`","Gamma distribution"))
+
+
+mat <- mat[order(mat[,1,drop=T]),]
+
+kable(mat)
+```
+
+### JAGS Functions
+
+```{r}
+mat <- matrix(
+  ncol = 2,
+  dimnames = list(NULL,c("Function","Description")),
+  data = c("`log(x)`","Log of x")
+)
+#mat  <- rbind(mat,c("`max(x,y)`","Maximum of `x` and `y`"))
+mat  <- rbind(mat,c("`min(x,y)`","Minimum of `x` and `y`"))
+mat  <- rbind(mat,c("`logit(x)`","Log odds of `x`"))
+#mat  <- rbind(mat,c("`sum(a)`","Sum of elements of `a`"))
+#mat  <- rbind(mat,c("`round(x)`","Round to integer away from `0`"))
+#mat  <- rbind(mat,c("`T(x,y)`","Truncate distribution so that values lie between `x` and `y`"))
+
+mat <- mat[order(mat[,1,drop=T]),]
+
+kable(mat)
+```
+
+### JAGS Operators
+
+```{r}
+mat <- matrix(
+  ncol = 2,
+  dimnames = list(NULL,c("Operator","Description")),
+  data = c("`<-`","Deterministic relationship")
+)
+mat  <- rbind(mat,c("`~`","Stochastic relationship"))
+mat  <- rbind(mat,c("`x^y`","Power where `x` is raised to the power of `y`"))
+mat  <- rbind(mat,c("`1:n`","Vector of integers from `1` to `n`"))
+mat  <- rbind(mat,c("`a[1:n]`","Subset of first `n` values in `a`"))
+mat  <- rbind(mat,c("`for (i in 1:n) {...}`","Repeat ... for `1` to `n` times incrementing `i` each time"))
+
+mat <- mat[order(mat[,1,drop=T]),]
+kable(mat)
+```
+
+## Model Code
+
+The following sections provide the variable and parameter definitions and JAGS model code for the analyses. By convention variables are named using `CamelCase` and the number of levels of a discrete variable `Factor` is referenced by `nFactor`. 
+
+```{r}
+knit_models(.replacement)
+```
+
+## Parameter Estimates
+
+The posterior distributions for the *fixed* (Kery and Schaub 2011 p. 75) parameters in each model are summarised below.
+
+```{r}
+knit_parameters(.replacement)
+```
+
+
+## Figures
+
+```{r}
+knit_figures(.replacement)
+```
+
+
+## References
+
+```{r}
+bibliography("html")
+```
