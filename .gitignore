@@ -1,6 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
+
 *.Rproj
 
 *.pdf
@@ -9,5 +10,9 @@
 *.toc
 *.bbl
 *.tex
+*.html
+*.md
+*.docx
 
 input
+output
