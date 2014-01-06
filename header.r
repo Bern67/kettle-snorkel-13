@@ -41,7 +41,7 @@ if (getDoParWorkers() == 1) {
 opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, 
                comment = NA, results = "asis")
 
-.project <- "Kettle River Rainbow Snorkels 2013"
+.project <- "Kettle River Rainbow Trout Snorkel Count Analysis 2013"
 .authors <- "Thorley J.L. & Hogan P.M."
 .date <- "6^th January 2014"
 
