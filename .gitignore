@@ -11,8 +11,10 @@
 *.bbl
 *.tex
 *.html
-*.md
 *.docx
 
 input
 output
+
+figures.md
+report.md
