@@ -2,11 +2,17 @@
 source("header.r")
 ```
 
-# Kettle River Rainbow Trout Snorkel Count Analysis 2013
+```{r}
+cat("\n## ",.title,"\n")
+cat(paste0("\n### ",day(.date),"-",month(.date, label = TRUE),"-",year(.date),"\n"))
 
-## 6^th Jan 2014
-
-*Suggested Citation: Thorley J.L. and Hogan P.M. (2014) Kettle River Rainbow Trout Snorkel Count Analysis 2013. A Poisson Consulting Ltd. Analysis. URL: https://github.com/poissonconsulting/kettle_snorkel_12.*
+cat("*Suggested Citation: ")
+cat(.authors)
+cat(paste0(" (",year(.date),") "))
+cat(.title)
+cat(". A Poisson Consulting Ltd. Analysis.")
+cat(paste0("URL: ",.url,".*\n"))
+```
 
 ## Introduction
 
@@ -132,14 +138,6 @@ The posterior distributions for the *fixed* (Kery and Schaub 2011 p. 75) paramet
 ```{r}
 knit_parameters(.replacement)
 ```
-
-
-## Figures
-
-```{r}
-knit_figures(.replacement)
-```
-
 
 ## References
 
