@@ -7,3 +7,5 @@ source("analyse-count.r")
 source("plot-count.r")
 
 source("knit-files.r")
+
+source("resize-figures.r")
