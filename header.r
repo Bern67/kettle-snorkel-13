@@ -41,6 +41,11 @@ if (getDoParWorkers() == 1) {
 opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, 
                comment = NA, results = "asis")
 
+.title <- "Kettle River Rainbow Trout Snorkel Count Analysis 2013"
+.authors <- "Thorley J.L. and Hogan P.M."
+.url <- "https://github.com/poissonconsulting/kettle_snorkel_12"
+.date <- as.Date("2014-01-07")
+
 .replacement <- c("count" = "",
                   "discharge" = "",
                   "density-year" = "",

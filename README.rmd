@@ -1,0 +1,16 @@
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+source("header.r")
+```
+```{r}
+cat("\n## ",.title,"\n")
+cat("*Suggested Citation: ")
+cat(.authors)
+cat(paste0(" (",year(.date),") "))
+cat(.title)
+cat(". A Poisson Consulting Ltd. Analysis.")
+cat(paste0("URL: ",.url,".*\n"))
+```
+
+To execute all the code simply source the `RUNME.r` file into R.
+
+For the code to run successfully one or more data files are required.
