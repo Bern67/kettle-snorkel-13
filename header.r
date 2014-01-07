@@ -43,7 +43,7 @@ opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE,
 
 .title <- "Kettle River Rainbow Trout Snorkel Count Analysis 2013"
 .authors <- "Thorley J.L. and Hogan P.M."
-.url <- "https://github.com/poissonconsulting/kettle_snorkel_12"
+.url <- "https://github.com/poissonconsulting/kettle-snorkel-13"
 .date <- as.Date("2014-01-07")
 
 .replacement <- c("count" = "",
