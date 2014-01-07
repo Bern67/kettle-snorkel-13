@@ -32,7 +32,7 @@ print(gp)
 
 save_plot("density-site")
 
-prediction <- predict(analysis, newdata = c("Site", "Year"))
+prediction <- predict(analysis, newdata = c("Site", "Year"), obs_by = TRUE)
 prediction$Year <- as.integer(as.character(prediction$Year))
 
 gp <- ggplot(data = prediction, aes(x = Year, y = estimate))
