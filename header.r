@@ -26,8 +26,8 @@ if (.Platform$OS.type == "unix") {
 graphics.off()
 remove(list = objects())
 
-theme_set(theme_Golder())
-palette(palette_Golder())
+theme_set(theme_Poisson())
+palette(palette_Poisson())
 
 reset_folders()
 
