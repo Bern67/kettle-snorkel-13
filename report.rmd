@@ -11,7 +11,9 @@ cat(.authors)
 cat(paste0(" (",year(.date),") "))
 cat(.title)
 cat(". A Poisson Consulting Ltd. Analysis.")
-cat(paste0("URL: ",.url,".*\n"))
+if(exists(".url"))
+  cat(paste0("URL: ",.url,"."))
+cat("*\n")
 ```
 
 ## Introduction
