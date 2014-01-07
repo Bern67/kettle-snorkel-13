@@ -1,10 +1,8 @@
 source("header.r")
 
-knit("README.rmd") 
-knit("report.rmd") 
-knit("figures.rmd") 
+knit("README.rmd")
 
-markdownToHTML("report.md") 
-markdownToHTML("figures.md") 
+knit2html("report.rmd") 
+knit2html("figures.rmd") 
 
 system("pandoc -s report.md -o report.docx")
