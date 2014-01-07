@@ -4,31 +4,31 @@ source("header.r")
 
 # Kettle River Rainbow Trout Snorkel Count Analysis 2013
 
-## 6^th Jan 2014 
+## 6^th Jan 2014
 
 *Suggested Citation: Thorley J.L. and Hogan P.M. (2014) Kettle River Rainbow Trout Snorkel Count Analysis 2013. A Poisson Consulting Ltd. Analysis. URL: https://github.com/poissonconsulting/kettle_snorkel_12.*
 
 ## Introduction
 
-Hierarchical Bayesian models were fitted to Kettle River snorkel data  using `r substr(R.version.string,1,15)` `r citep(.bib["r_core_team_r:_2013"])`
+Hierarchical Bayesian models were fitted to Kettle River rainbow trout snorkel data  using `r substr(R.version.string,1,15)` `r citep(.bib["r_core_team_r:_2013"])`
 and JAGS 3.3.0 
 `r citep(.bib["plummer_jags_2012"])` which interfaced with each other via the 
-jaggernaut `r citep(.bib["jaggernaut"])` R package. For additional information 
-on hierarchical Bayesian modelling in the BUGS language, of which JAGS uses a 
-dialect, the reader is referred to `r citet(.bib["kery_bayesian_2011"])`.
+jaggernaut `r citep(.bib["jaggernaut"])` R package. 
+
+The data were provided by Redfish Consulting Ltd. with GIS and database support from Gary Pavan.
 
 ## Methods
 
 Unless specified, the models assumed vague (low information) prior distributions `r citep(.bib["kery_bayesian_2011"], page = "36")`. The posterior distributions were estimated from a minimum of 1,000 Markov Chain Monte Carlo (MCMC) samples thinned from the second halves of three chains `r citep(.bib["kery_bayesian_2011"], page = "38-40")`. Model convergence was confirmed by ensuring that Rhat `r citep(.bib["kery_bayesian_2011"], page = "40")` was less than 1.1 for each of the parameters in the model `r citep(.bib["kery_bayesian_2011"], page = "61")`.
 
-The posterior distributions are summarised in terms of a point estimate (mean), lower and upper `r opts_jagr("level") * 100`% credibility limits (`r (1 - opts_jagr("level")) / 2 * 100`th and 
-`r (1 - (1 - opts_jagr("level")) / 2) * 100` th percentiles), the standard deviation (SD), percent relative error (half the 95% credibility interval as a percent of the point estimate) and significance `r citep(.bib["kery_bayesian_2011"], page = "37,42")`.
+The posterior distributions are summarised in terms of a point estimate (mean), lower and upper `r opts_jagr("level") * 100`% credibility limits (`r (1 - opts_jagr("level")) / 2 * 100`^th and 
+`r (1 - (1 - opts_jagr("level")) / 2) * 100`^th percentiles), the standard deviation (SD), percent relative error (half the 95% credibility interval as a percent of the point estimate) and significance `r citep(.bib["kery_bayesian_2011"], page = "37,42")`.
 
 The results are displayed 
 graphically by plotting the modeled relationship between the particular 
 variable(s) and the response (with `r opts_jagr("level") * 100`% 
-credible intervals) while the 
-remaining variables were held constant. In general, 
+credible intervals) with the 
+remaining variables held constant. In general, 
 continuous and discrete fixed variables are held constant at their mean and 
 first level values respectively while random variables are held constant at their 
 typical values (expected values of the underlying hyperdistributions) 
@@ -45,7 +45,7 @@ and mark-resighting data for the Kettle River using a binomial mixture model `r 
 Key assumptions of the binomial mixture model include:
 * Lineal density varies randonly with year, site and site within year.
 * Observer efficiency varies with discharge (a second order polynomial was considered
-but was not significant).
+but was not significant and was excluded from the final model).
 * Detection probability is constant for all individuals.
 * There is no tag loss.
 * Sites are closed between marking and counting.
@@ -67,7 +67,7 @@ mat <- matrix(
 mat  <- rbind(mat,c("`dnorm(mu, sd^-2)`","Normal distribution"))
 mat  <- rbind(mat,c("`dpois(lambda)`","Poisson distribution"))
 mat  <- rbind(mat,c("`dbin(p, n)`","Binomial distribution"))
-mat  <- rbind(mat,c("`dbern(p)`","Bernoulli distribution"))
+#mat  <- rbind(mat,c("`dbern(p)`","Bernoulli distribution"))
 #mat  <- rbind(mat,c("`dlnorm(mu, sd^-2)`","Log-normal distribution"))
 #mat  <- rbind(mat,c("`dcat(pi)`","Categorical distribution"))
 #mat  <- rbind(mat,c("`ddirch(alpha)`","Dirichlet distribution"))
@@ -87,7 +87,7 @@ mat <- matrix(
   dimnames = list(NULL,c("Function","Description")),
   data = c("`log(x)`","Log of x")
 )
-#mat  <- rbind(mat,c("`max(x,y)`","Maximum of `x` and `y`"))
+mat  <- rbind(mat,c("`max(x,y)`","Maximum of `x` and `y`"))
 mat  <- rbind(mat,c("`min(x,y)`","Minimum of `x` and `y`"))
 mat  <- rbind(mat,c("`logit(x)`","Log odds of `x`"))
 #mat  <- rbind(mat,c("`sum(a)`","Sum of elements of `a`"))
