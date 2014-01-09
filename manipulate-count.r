@@ -14,6 +14,8 @@ data$Dayte <- dayte(data$Date)
 data$Replicate <- factor(data$Replicate)
 data$Year <- factor(data$Year)
 
+data$Time <- as.numeric(as.character(data$Year))
+
 save_rdata(data)
 
 data$Year <- as.integer(as.character(data$Year))
