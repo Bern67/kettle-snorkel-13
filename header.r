@@ -24,7 +24,7 @@ if (.Platform$OS.type == "unix") {
 }
 
 graphics.off()
-remove(list = objects())
+remove(list = objects(all = TRUE))
 
 theme_set(theme_Poisson())
 palette(palette_Poisson())
@@ -34,28 +34,6 @@ reset_folders()
 opts_jagr(mode = "report")
 
 if (getDoParWorkers() == 1) {
-  registerDoParallel(6)
+  registerDoParallel(3)
   opts_jagr(parallel = TRUE)
 }
-
-opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, 
-               comment = NA, results = "asis")
-
-.title <- "Kettle River Rainbow Trout Snorkel Count Analysis 2013"
-.authors <- "Thorley J.L. and Hogan P.M."
-.url <- "https://github.com/poissonconsulting/kettle-snorkel-13"
-.date <- as.Date("2014-01-07")
-
-.replacement <- c("count" = "",
-                  "discharge" = "",
-                  "density-year" = "",
-                  "density-site" = "",
-                  "density-site-year" = "",
-                  "efficiency" = "")
-
-.bib <- read.bibtex("report.bib")
-
-.bib <- c(.bib, 
-          "jaggernaut" = citation("jaggernaut"), 
-          "ggplot2" = citation("ggplot2"),
-          "R" = citation())
