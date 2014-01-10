@@ -1,18 +1,21 @@
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
-source("header.r")
+opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, comment = NA, results = "asis")
 ```
+
 ```{r}
 cat("\n## ",.title,"\n")
-cat("*Suggested Citation: ")
-cat(.authors)
-cat(paste0(" (",year(.date),") "))
-cat(.title)
-cat(". A Poisson Consulting Ltd. Analysis.")
-if(exists(".url"))
-  cat(paste0("URL: ",.url,"."))
-cat("*\n")
 ```
 
 To execute all the code simply source the `RUNME.r` file into R.
 
 For the code to run successfully one or more data files are required.
+
+```{r}
+if(is.Date(.web_dir)) {
+  cat("\n\nTo see the results view the [analysis report](")
+  cat("http://poissonconsulting.github.io/analyses/")
+  cat(format(as.Date("2014-01-09"),"%Y/%m/%d/"))
+  cat(project_folder())
+  cat(").\n")
+}
+```

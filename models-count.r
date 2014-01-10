@@ -7,7 +7,7 @@ description = c(
   
   "`eDensity[i]`" = "Expected fish density during i^th site visit",
   "`Time[i]`" = "Centred year of i^th site visit as a continuous varible",
-  "`Year[i]`" = "Year of i^th site visit as a factor" 
+  "`Year[i]`" = "Year of i^th site visit as a factor",
   "`bDensity0`" = "Intercept of `log(eDensity[i])`",
   "`bDensitySite[st]`" = "Linear effect of st^th site on `log(eDensity[i])`",
   "`sDensitySite`" = "SD of `bDensitySite`", 
@@ -23,7 +23,7 @@ description = c(
   "`SiteLength[i]`" = "Length of site during i^th site visit",
   "`eAbundance[i]`" = "Expected abundance during i^th site visit",
   "`eCount[i]`" = "Expected total number of fish observed during i^th site visit",
-  "`Count[i]`" = "Total number of fish observed during i^th site visit",
+  "`Count[i]`" = "Total number of fish observed during i^th site visit"
 )
 
 
