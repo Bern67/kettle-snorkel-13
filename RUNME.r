@@ -8,4 +8,4 @@ source("plot-count.r")
 
 source("knit-files.r")
 
-source("resize-figures.r")
+source("resize-figures.r") 

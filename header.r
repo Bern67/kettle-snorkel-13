@@ -14,13 +14,13 @@ library(jaggernaut)
 library(poiscon)
 
 if (.Platform$OS.type == "unix") {
-  if (Sys.info()["sysname"] == "Darwin") {
-    quartzFonts(sans = quartzFont(rep("Arial", 4)))
-  } else {
-    stop("need to set font to Arial for linux operating systems")
-  }
+    if (Sys.info()["sysname"] == "Darwin") {
+        quartzFonts(sans = quartzFont(rep("Arial", 4)))
+    } else {
+        stop("need to set font to Arial for linux operating systems")
+    }
 } else {
-  windowsFonts(Arial = windowsFont("Arial"))
+    windowsFonts(Arial = windowsFont("Arial"))
 }
 
 graphics.off()
@@ -34,6 +34,6 @@ reset_folders()
 opts_jagr(mode = "report")
 
 if (getDoParWorkers() == 1) {
-  registerDoParallel(3)
-  opts_jagr(parallel = TRUE)
-}
+    registerDoParallel(3)
+    opts_jagr(parallel = TRUE)
+} 

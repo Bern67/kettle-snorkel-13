@@ -14,6 +14,6 @@ print(summary(analysis))
 save_tables(analysis)
 
 if (opts_jagr("mode") != "debug") {
-  save_plots(analysis)
-  plot_residuals(analysis)
-}
+    save_plots(analysis)
+    plot_residuals(analysis)
+} 

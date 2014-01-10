@@ -1,8 +1,3 @@
-#### Summary of models ========================================================================================
-#
-# log(eDensity[i]) <- bDensity0 + bDensityYear[Year[i]] + bDensitySite[Site[i]] + bDensitySiteYear[Site[i], Year[i]] + bTime * Time[i]
-
-#### Description ####
 
 description = c(
   "`eEfficiency[i]`" = "Expected observer efficiency during the i^th site visit",
