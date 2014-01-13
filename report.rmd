@@ -65,6 +65,12 @@ if(is.Date(.web_dir)) {
   cat(paste0(.authors," (", year(.web_dir), ") ", .title, ". "))
   cat("A Poisson Consulting Ltd. Analysis Report. ") 
   cat(paste0("URL: [", report_url(.web_dir), "](",report_url(.web_dir),")."))
+} else {
+  cat("\n\n*Suggested Citation:* ")
+  cat(paste0(.authors," (", year(Sys.Date()), ") ", .title, ". "))
+  cat("A Poisson Consulting Ltd. Analysis Report. ") 
+  cat(paste0("URL: [http://poissonconsulting.github.io/archive.html]",
+             "(http://poissonconsulting.github.io/archive.html)"))
 }
 ```
 
