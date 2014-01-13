@@ -4,7 +4,7 @@ set_folders("count")
 
 analysis <- load_analysis()
 
-prediction <- predict(analysis, newdata = c("Year"))
+prediction <- predict(analysis, newdata = c("Year", "Time"), obs_by = TRUE)
 prediction$Year <- as.integer(as.character(prediction$Year))
 
 gp <- ggplot(data = prediction, aes(x = Year, y = estimate))
