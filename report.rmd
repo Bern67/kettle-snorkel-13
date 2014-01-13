@@ -56,9 +56,6 @@ jaggernaut `r citep(.bib["jaggernaut"])` R package. For additional information o
 
 The data were provided by Redfish Consulting Ltd. with GIS and database support from Gary Pavan.
 ```{r}
-  cat("The source code can be downloaded from the project's [repository](")
-  cat(repository_url())
-  cat(").")
 
 if(is.Date(.web_dir)) {
   cat("\n\n*Suggested Citation:* ")
@@ -77,8 +74,9 @@ if(is.Date(.web_dir)) {
 ## Methods
 Unless specified, the models assumed vague (low information) prior distributions `r citep(.bib["kery_bayesian_2011"], page = "36")`. The posterior distributions were estimated from a minimum of 1,000 Markov Chain Monte Carlo (MCMC) samples thinned from the second halves of three chains `r citep(.bib["kery_bayesian_2011"], page = "38-40")`. Model convergence was confirmed by ensuring that Rhat `r citep(.bib["kery_bayesian_2011"], page = "40")` was less than 1.1 for each of the parameters in the model `r citep(.bib["kery_bayesian_2011"], page = "61")`.
 
-The posterior distributions are summarised below in terms of a point estimate (mean), lower and upper `r opts_jagr("level") * 100`% credibility limits (`r (1 - opts_jagr("level")) / 2 * 100`^th and 
-`r (1 - (1 - opts_jagr("level")) / 2) * 100`^th percentiles), the standard deviation (SD), percent relative error (half the 95% credibility interval as a percent of the point estimate) and significance `r citep(.bib["kery_bayesian_2011"], page = "37,42")`.
+The posterior distributions of the **fixed** (Kery and Schaub 2011 p. 75) parameters
+are summarised below in terms of a *point* estimate (mean), *lower* and *upper* `r opts_jagr("level") * 100`% credibility limits (`r (1 - opts_jagr("level")) / 2 * 100`th and 
+`r (1 - (1 - opts_jagr("level")) / 2) * 100`th percentiles), the standard deviation (*SD*), percent relative *error* (half the 95% credibility interval as a percent of the point estimate) and *significance* `r citep(.bib["kery_bayesian_2011"], page = "37,42")`.
 
 The results were displayed 
 graphically by plotting the modeled relationship between the particular 
@@ -89,7 +87,7 @@ continuous and discrete fixed variables were held constant at their mean and
 first level values respectively while random variables were held constant at their 
 typical values (expected values of the underlying hyperdistributions) 
 `r citep(.bib["kery_bayesian_2011"], page = "77-82")`. Where informative the influence of particular variables was expressed in terms 
-of the effect size (i.e., percent change in the response variable) with 
+of the *effect size* (i.e., percent change in the response variable) with 
 `r opts_jagr("level") * 100`% credibile intervals 
 `r citep(.bib["bradford_using_2005"])`. Plots were produced using the ggplot2 R package `r citep(.bib["ggplot2"])`.
 
