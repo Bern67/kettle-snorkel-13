@@ -3,8 +3,7 @@ source("header.r")
 .title <- "Kettle River Rainbow Trout Snorkel Count Analysis 2013"
 .authors <- "Thorley J.L. and Hogan P.M."
 .tags <- c("kettle river", "rainbow trout", "snorkel")
-.web_dir <- "sdf98u" 
-#.web_dir <- as.Date("2014-01-09")
+.web_dir <- as.Date("2014-01-13")
 
 output_dir <- paste0("output/report/", project_folder())
 

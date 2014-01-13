@@ -2,15 +2,11 @@
 
 opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE, comment = NA, results = "asis")
 
-.replacement <- c(July = "July", 
-                  September = "September", 
-                  depth = "Depth Tags", 
-                  db = "Hydroacoustic Surveys", 
-                  `33` = "-33 decibels", 
-                  `32` = "-32 decibels", 
-                  year = "Year", 
-                  transect = "Transect", 
-                  combined = "Depth Distributions")
+.replacement <- c(discharge = "Discharge",
+                  count = "Count",
+                  year = "Year",
+                  site = "Site"
+                  )
 
 .bib <- c(read.bibtex("references.bib"),
           jaggernaut = citation("jaggernaut"),
@@ -47,29 +43,24 @@ if(!is.Date(.web_dir)) {
 }
 ```
 
+```{r}
+
+if(is.Date(.web_dir)) {
+  cat("\n\n*Suggested Citation: ")
+  cat(paste0(.authors," (", year(.web_dir), ") ", .title, ". "))
+  cat("A Poisson Consulting Ltd. Analysis Report. ") 
+  cat(paste0("URL: [", report_url(.web_dir), "](",report_url(.web_dir),").*"))
+} 
+```
+
 ## Background
 
 Hierarchical Bayesian models were fitted to the Kettle River rainbow trout snorkel count data  using `r substr(R.version.string,1,15)` `r citep(.bib["r_core_team_r:_2013"])`
 and JAGS 3.3.0 
 `r citep(.bib["plummer_jags_2012"])` which interfaced with each other via the 
-jaggernaut `r citep(.bib["jaggernaut"])` R package. For additional information on hierarchical Bayesian modelling in the BUGS language, of which JAGS uses a dialect, the reader is referred to Kery and Schuab (2011) pages 41-44.
+jaggernaut `r citep(.bib["jaggernaut"])` R package. For additional information on hierarchical Bayesian modelling in the BUGS language, of which JAGS uses a dialect, the reader is referred to Kery and Schaub (2011) pages 41-44.
 
 The data were provided by Redfish Consulting Ltd. with GIS and database support from Gary Pavan.
-```{r}
-
-if(is.Date(.web_dir)) {
-  cat("\n\n*Suggested Citation:* ")
-  cat(paste0(.authors," (", year(.web_dir), ") ", .title, ". "))
-  cat("A Poisson Consulting Ltd. Analysis Report. ") 
-  cat(paste0("URL: [", report_url(.web_dir), "](",report_url(.web_dir),")."))
-} else {
-  cat("\n\n*Suggested Citation:* ")
-  cat(paste0(.authors," (", year(Sys.Date()), ") ", .title, ". "))
-  cat("A Poisson Consulting Ltd. Analysis Report. ") 
-  cat(paste0("URL: [http://poissonconsulting.github.io/archive.html]",
-             "(http://poissonconsulting.github.io/archive.html)"))
-}
-```
 
 ## Methods
 Unless specified, the models assumed vague (low information) prior distributions `r citep(.bib["kery_bayesian_2011"], page = "36")`. The posterior distributions were estimated from a minimum of 1,000 Markov Chain Monte Carlo (MCMC) samples thinned from the second halves of three chains `r citep(.bib["kery_bayesian_2011"], page = "38-40")`. Model convergence was confirmed by ensuring that Rhat `r citep(.bib["kery_bayesian_2011"], page = "40")` was less than 1.1 for each of the parameters in the model `r citep(.bib["kery_bayesian_2011"], page = "61")`.
@@ -78,37 +69,41 @@ The posterior distributions of the **fixed** (Kery and Schaub 2011 p. 75) parame
 are summarised below in terms of a *point* estimate (mean), *lower* and *upper* `r opts_jagr("level") * 100`% credibility limits (`r (1 - opts_jagr("level")) / 2 * 100`th and 
 `r (1 - (1 - opts_jagr("level")) / 2) * 100`th percentiles), the standard deviation (*SD*), percent relative *error* (half the 95% credibility interval as a percent of the point estimate) and *significance* `r citep(.bib["kery_bayesian_2011"], page = "37,42")`.
 
-The results were displayed 
-graphically by plotting the modeled relationship between the particular 
-variable(s) and the response (with `r opts_jagr("level") * 100`% 
+The results are displayed 
+graphically by plotting the modeled relationships between particular 
+variables and the response (with `r opts_jagr("level") * 100`% 
 credible intervals) with the 
 remaining variables held constant. In general, 
-continuous and discrete fixed variables were held constant at their mean and 
-first level values respectively while random variables were held constant at their 
+continuous and discrete fixed variables are held constant at their mean and 
+first level values respectively while random variables are held constant at their 
 typical values (expected values of the underlying hyperdistributions) 
-`r citep(.bib["kery_bayesian_2011"], page = "77-82")`. Where informative the influence of particular variables was expressed in terms 
+`r citep(.bib["kery_bayesian_2011"], page = "77-82")`. Where informative the influence of particular variables is expressed in terms 
 of the *effect size* (i.e., percent change in the response variable) with 
-`r opts_jagr("level") * 100`% credibile intervals 
+`r opts_jagr("level") * 100`% credible intervals 
 `r citep(.bib["bradford_using_2005"])`. Plots were produced using the ggplot2 R package `r citep(.bib["ggplot2"])`.
 
-## Model Assumptions
+### Count
 
 The lineal density and observer efficiency were estimated from the snorkel count
-and mark-resighting data for the Kettle River using a binomial mixture model `r citep(.bib["kery_bayesian_2011"], page = "383-388")`
+and mark-resighting data for the Kettle River using a binomial mixture model `r citep(.bib["kery_bayesian_2011"], page = "383-388")`.
 
 Key assumptions of the binomial mixture model include:
-* Lineal density varies randonly with year, site and site within year.
-* Observer efficiency varies with discharge (a second order polynomial was considered
+* There is a trend in lineal density across years.
+* Lineal density varies randomly with year, site and site within year.
+* Observer efficiency varies linearly with discharge (a quadratic term was considered
 but was not significant and was excluded from the final model).
 * Detection probability is constant for all individuals.
 * There is no tag loss.
 * Sites are closed between marking and counting.
 * There are no false positives such as double counts.
 
-## Model Code
-JAGS distributions, functions and operators used in the models are defined in the following three tables. For additional information on the JAGS dialect of the BUGS language see the [JAGS User Manual](http://people.math.aau.dk/~kkb/Undervisning/Bayes13/sorenh/docs/jags_user_manual.pdf) `r citep(.bib["plummer_jags_2012"])`.
+### Model Code
 
-### JAGS Distributions
+JAGS distributions, functions and operators used in the models are defined in the first three tables below. For additional information on the JAGS dialect of the BUGS language see the [JAGS User Manual](http://people.math.aau.dk/~kkb/Undervisning/Bayes13/sorenh/docs/jags_user_manual.pdf) `r citep(.bib["plummer_jags_2012"])`.
+
+The other subsections provide the variable and parameter definitions and JAGS model code for the analyses. By convention variables are named using *CamelCase* and the number of levels of a discrete variable `Factor` is referenced by `nFactor`.
+
+#### JAGS Distributions
 
 ```{r}
 mat <- matrix(
@@ -132,27 +127,30 @@ mat <- mat[order(mat[,1,drop=T]),]
 kable(mat)
 ```
 
-### JAGS Functions
+#### JAGS Functions
 
 ```{r}
 mat <- matrix(
   ncol = 2,
   dimnames = list(NULL,c("Function","Description")),
-  data = c("`log(x)`","Log of x")
+  data = c("`length(x)`","Length of vector *x*")
 )
-mat  <- rbind(mat,c("`max(x,y)`","Maximum of `x` and `y`"))
-mat  <- rbind(mat,c("`min(x,y)`","Minimum of `x` and `y`"))
-mat  <- rbind(mat,c("`logit(x)`","Log odds of `x`"))
-#mat  <- rbind(mat,c("`sum(a)`","Sum of elements of `a`"))
-#mat  <- rbind(mat,c("`round(x)`","Round to integer away from `0`"))
-#mat  <- rbind(mat,c("`T(x,y)`","Truncate distribution so that values lie between `x` and `y`"))
+mat  <- rbind(mat,c("`log(x)`","Natural logarithm of *x*"))
+mat  <- rbind(mat,c("`max(x,y)`","Maximum of *x* and *y*"))
+mat  <- rbind(mat,c("`min(x,y)`","Minimum of *x* and *y*"))
+mat  <- rbind(mat,c("`logit(x)`","Log-odds of *x*"))
+#mat  <- rbind(mat,c("`ifelse(x, a, b)`","If *x* then *a* else *b*"))
+#mat  <- rbind(mat,c("`sum(a)`","Sum of elements of *a*"))
+#mat  <- rbind(mat,c("`round(x)`","Round to integer away from 0"))
+#mat  <- rbind(mat,c("`T(x,y)`","Truncate distribution so that values lie between *x* and *y*"))
 
 mat <- mat[order(mat[,1,drop=T]),]
 
 kable(mat)
 ```
 
-### JAGS Operators
+
+#### JAGS Operators
 
 ```{r}
 mat <- matrix(
@@ -161,16 +159,14 @@ mat <- matrix(
   data = c("`<-`","Deterministic relationship")
 )
 mat  <- rbind(mat,c("`~`","Stochastic relationship"))
-mat  <- rbind(mat,c("`x^y`","Power where `x` is raised to the power of `y`"))
-mat  <- rbind(mat,c("`1:n`","Vector of integers from `1` to `n`"))
-mat  <- rbind(mat,c("`a[1:n]`","Subset of first `n` values in `a`"))
-mat  <- rbind(mat,c("`for (i in 1:n) {...}`","Repeat ... for `1` to `n` times incrementing `i` each time"))
+mat  <- rbind(mat,c("`x^y`","Power where *x* is raised to the power of *y*"))
+mat  <- rbind(mat,c("`1:n`","Vector of integers from *1* to *n*"))
+mat  <- rbind(mat,c("`a[1:n]`","Subset of first *n* values in *a*"))
+mat  <- rbind(mat,c("`for (i in 1:n) {...}`","Repeat *...* for *1* to *n* times incrementing *i* each time"))
 
 mat <- mat[order(mat[,1,drop=T]),]
 kable(mat)
 ```
-
-The following sections provide the variable and parameter definitions and JAGS model code for the analyses. By convention variables are named using `CamelCase` and the number of levels of a discrete variable `Factor` is referenced by `nFactor`. 
 
 ```{r}
 knit_models(.replacement)
@@ -190,14 +186,6 @@ if(.figures) {
   knit_figures(.replacement)
 }
 ```
-
-## Recommendations
-It is recommended that:
-
-* more mark recapture is conducted to reduce the uncertainty surrounding observer
-efficiency estimates
-* surveys are not conducted at discharges greater than 8 - 10 cms to ensure
-as high observer efficiencies as possible
 
 ## References
 

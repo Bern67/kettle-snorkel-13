@@ -1,29 +1,27 @@
 
 description = c(
-  "`eEfficiency[i]`" = "Expected observer efficiency during the i^th site visit",
-  "`Discharge[i]`" = "Standardised discharge during i^th site visit",
-  "`bEfficiency0`" = "Intercept of `logit(eEfficiency[i])`",
-  "`bEfficiencyDischarge`" = "Linear effect of standardised discharge on `logit(eEfficiency[i])`",
-  
-  "`eDensity[i]`" = "Expected fish density during i^th site visit",
-  "`Time[i]`" = "Centred year of i^th site visit as a continuous varible",
-  "`Year[i]`" = "Year of i^th site visit as a factor",
-  "`bDensity0`" = "Intercept of `log(eDensity[i])`",
-  "`bDensitySite[st]`" = "Linear effect of st^th site on `log(eDensity[i])`",
+  "`eEfficiency[i]`" = "Expected observer efficiency during the i*th* site visit",
+  "`Discharge[i]`" = "Standardised discharge during the i*th* site visit",
+  "`bEfficiency0`" = "Intercept of `logit(eEfficiency)`",
+  "`bEfficiencyDischarge`" = "Linear effect of standardised discharge on `logit(eEfficiency)`",
+  "`eDensity[i]`" = "Expected fish density during i*th* site visit",
+  "`Time[i]`" = "Centred year of i*th* site visit as a continuous varible",
+  "`Year[i]`" = "Year of i*th* site visit as a factor",
+  "`bDensity0`" = "Intercept of `log(eDensity)`",
+  "`bDensitySite[st]`" = "Linear effect of st*th* site on `log(eDensity)`",
   "`sDensitySite`" = "SD of `bDensitySite`", 
-  "`bDensitySiteYear[st, yr]`" = "Linear effect of st^th site in yr^th year on `log(eDensity[i])`",
-  "`sDensitySiteYear`" = "SD of bDensitySiteYear", 
-  "`bDensityYear[yr]`" = "Linear effect of yr^th year on `log(eDensity[i])`",
-  "`sDensityYear`" = "SD of bDensityYear", 
-  "`bTime`" = "Linear effect of centred year on `log(eDensity[i])`",
-  
-  "`ProportionSurveyed[i]`" = "Proportion of site surveyed during i^th site visit",                  
-  "`Released[i]`" = "Number of fish marked prior to the i^th site visit",                  
-  "`Resighted[i]`" = "Number of marked fish observed during i^th site visit",
-  "`SiteLength[i]`" = "Length of site during i^th site visit",
-  "`eAbundance[i]`" = "Expected abundance during i^th site visit",
-  "`eCount[i]`" = "Expected total number of fish observed during i^th site visit",
-  "`Count[i]`" = "Total number of fish observed during i^th site visit"
+  "`bDensitySiteYear[st, yr]`" = "Linear effect of st*th* site in yr*th* year on `log(eDensity)`",
+  "`sDensitySiteYear`" = "SD of `bDensitySiteYear`", 
+  "`bDensityYear[yr]`" = "Linear effect of yr*th* year on `log(eDensity)`",
+  "`sDensityYear`" = "SD of `bDensityYear`", 
+  "`bTime`" = "Linear effect of centred year on `log(eDensity)`",
+  "`ProportionSurveyed[i]`" = "Proportion of site surveyed during i*th* site visit",                  
+  "`Released[i]`" = "Number of fish marked prior to the i*th* site visit",                  
+  "`Resighted[i]`" = "Number of marked fish observed during i*th* site visit",
+  "`SiteLength[i]`" = "Length of site during i*th* site visit",
+  "`eAbundance[i]`" = "Expected abundance during i*th* site visit",
+  "`eCount[i]`" = "Expected total number of fish observed during i*th* site visit",
+  "`Count[i]`" = "Total number of fish observed during i*th* site visit"
 )
 
 

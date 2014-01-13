@@ -36,14 +36,14 @@ prediction <- predict(analysis, newdata = c("Site", "Year"), obs_by = TRUE)
 prediction$Year <- as.integer(as.character(prediction$Year))
 
 gp <- ggplot(data = prediction, aes(x = Year, y = estimate))
-gp <- gp + facet_wrap(~Site)
+gp <- gp + facet_grid(Site~., scales = "free_y")
 gp <- gp + geom_pointrange(aes(ymin = lower, ymax = upper))
 gp <- gp + scale_x_continuous(name = "Year", breaks = c(2000, 2005, 2010))
 gp <- gp + scale_y_continuous(name = "Density (fish/km)", label = comma, expand = c(0, 
     0))
 gp <- gp + expand_limits(y = 0)
 
-gwindow(1, 1)
+gwindow(1, 0.75)
 print(gp)
 
 save_plot("density-site-year")
