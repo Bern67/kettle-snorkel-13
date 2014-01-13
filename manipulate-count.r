@@ -6,6 +6,8 @@ data <- load_rdata()
 
 set_folders("count")
 
+levels(data$Site) <- rev(levels(data$Site))
+
 data$Released <- as.integer(data$Released)
 data$Resighted <- as.integer(data$Resighted)
 data$Count <- as.integer(data$Count)
