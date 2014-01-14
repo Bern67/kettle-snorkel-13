@@ -31,9 +31,9 @@ palette(palette_Poisson())
 
 reset_folders()
 
-opts_jagr(mode = "report")
-
 if (getDoParWorkers() == 1) {
-    registerDoParallel(3)
-    opts_jagr(parallel = TRUE)
+  registerDoParallel(3)
 } 
+
+opts_jagr(parallel = TRUE)
+opts_jagr(mode = "report")

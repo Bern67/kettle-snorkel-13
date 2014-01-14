@@ -6,6 +6,9 @@ data <- load_rdata()
 
 set_folders("count")
 
+# hack to remove unrealistically low counts on second replicate for KR5
+data <- subset(data, Site != "KR5" | Replicate != 2)
+
 data$Site <- factor(as.character(data$Site), levels = c("WKC", "WKT", "KR2", "KR3", "KR5", "GR2", "GR3", "GR6"))
 
 data$Released <- as.integer(data$Released)

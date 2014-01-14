@@ -5,7 +5,7 @@ set_folders("count")
 
 data <- load_rdata()
 
-analysis <- jags_analysis(models, data = data, niters = 10^5)
+analysis <- jags_analysis(models, data = data, niters = 10^6)
 
 save_analysis(analysis)
 

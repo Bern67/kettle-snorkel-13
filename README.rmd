@@ -13,9 +13,7 @@ For the code to run successfully one or more data files are required.
 ```{r}
 if(is.Date(.web_dir)) {
   cat("\n\nTo see the results view the [analysis report](")
-  cat("http://poissonconsulting.github.io/analyses/")
-  cat(format(as.Date("2014-01-09"),"%Y/%m/%d/"))
-  cat(project_folder())
+  cat(report_url(.web_dir)")
   cat(").\n")
 }
 ```
